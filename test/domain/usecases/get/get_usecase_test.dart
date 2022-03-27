@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:fpdart/fpdart.dart';
-import 'package:string_validator/string_validator.dart';
+import 'package:string_validator/string_validator.dart' as validator;
 import 'package:mocktail/mocktail.dart';
 
 import 'package:restmon/domain/exceptions/exceptions.dart';
@@ -29,7 +29,7 @@ class Get implements GetUsecase {
 
   @override
   Future<Either<Exception, Response>> call(Request request) async {
-    if (!isURL(request.url, {
+    if (!validator.isURL(request.url, {
       "require_protocol": true,
     })) {
       return left(UnexpectedURLFormatException());
@@ -54,6 +54,19 @@ void main() {
     );
   });
 
+  void mockGetReturn({
+    required Request request,
+    required Either<Exception, Response> response,
+  }) {
+    when(
+      () => httpRepository.get(
+        request,
+      ),
+    ).thenAnswer(
+      (invocation) async => response,
+    );
+  }
+
   test(
       "Should throw an UnexpectedURLFormatException when url given does not follow expected format",
       () async {
@@ -67,6 +80,33 @@ void main() {
         (r) => r,
       ),
       isA<UnexpectedURLFormatException>(),
+    );
+  });
+
+  test("Response should contain corresponding Request", () async {
+    final request = Request(
+      "https://echo.hoppscotch.io",
+      headers: {"authenticaton": "mock"},
+    );
+    mockGetReturn(
+      request: request,
+      response: Right(
+        Response(
+          status: 200,
+          response: {},
+          request: request,
+        ),
+      ),
+    );
+
+    final response = await sut(request);
+
+    response.fold(
+      (l) => l,
+      (r) => expect(
+        r.request.data,
+        equals(request.data),
+      ),
     );
   });
 }
