@@ -2,6 +2,11 @@
 
 A HTTP client made with 💚 and Flutter to Flutter devs.
 
+App design will follow this 
+<a href="https://www.figma.com/file/8eJcNNCEOn9NIAIVOd6LZl/Restmon?node-id=0%3A1">
+    Figma file
+</a>
+
 ## WIP - Todolist
 
 ### Basic HTTP client features:
