@@ -1,6 +1,6 @@
 # Restmon
 
-A HTTP client made with 💚 and Flutter to Flutter devs.
+A HTTP client made with 💚 and Flutter for Flutter devs.
 
 App design will follow this 
 <a href="https://www.figma.com/file/8eJcNNCEOn9NIAIVOd6LZl/Restmon?node-id=0%3A1">
